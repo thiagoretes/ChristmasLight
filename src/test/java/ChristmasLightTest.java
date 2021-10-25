@@ -14,74 +14,76 @@ class ChristmasLightTest {
 
     @Test
     void shouldCountLights() {
-        christmasLight.turnOn(0, 0, 999, 999);
+        var instruction = new Instruction(InstructionType.TURNON,
+                0, 0,
+                999, 999);
+
+        christmasLight.executeInstruction(instruction);
 
         assertEquals(1000000, christmasLight.getTotalLight());
     }
 
     @Test
     void shouldTurnOnOneLight() {
-        christmasLight.turnOn(0, 0, 0, 0);
-        assertEquals(1, christmasLight.getLights()[0][0]);
+        var instruction = new Instruction(InstructionType.TURNON,
+                0, 0,
+                0, 0);
+
+        christmasLight.executeInstruction(instruction);
+        assertEquals(1, christmasLight.getTotalLight());
     }
 
     @Test
     void shouldTurnOnMultipleLights() {
-        christmasLight.turnOn(250, 500, 750, 999);
+        var instruction = new Instruction(InstructionType.TURNON,
+                0, 0,
+                9, 4);
 
-        int[][] lights = new int[1000][1000];
-        for (int i = 250; i <= 750; i++) {
-            for (int j = 500; j <= 999; j++) {
-                lights[j][i] = 1;
-            }
-        }
-        assertArrayEquals(lights, christmasLight.getLights());
+        christmasLight.executeInstruction(instruction);
+
+        assertEquals(50, christmasLight.getTotalLight());
     }
 
     @Test
     void shouldTurnOffMultipleLights() {
-        christmasLight.turnOn(250, 500, 750, 999);
-        int[][] lights = new int[1000][1000];
-        for (int i = 250; i <= 750; i++) {
-            for (int j = 500; j <= 999; j++) {
-                lights[j][i] = 1;
-            }
-        }
-        assertArrayEquals(lights, christmasLight.getLights());
-        for (int i = 250; i <= 750; i++) {
-            for (int j = 500; j <= 998; j++) {
-                lights[j][i] = 0;
-            }
-        }
-        christmasLight.turnOff(250, 500, 750, 998);
-        assertArrayEquals(lights, christmasLight.getLights());
+        var instruction = new Instruction(InstructionType.TURNON,
+                0, 0,
+                9, 4);
+
+        christmasLight.executeInstruction(instruction);
+
+        instruction = new Instruction(InstructionType.TURNOFF,
+                0, 0,
+                8, 4);
+
+        christmasLight.executeInstruction(instruction);
+        assertEquals(5, christmasLight.getTotalLight());
 
     }
 
     @Test
     void shouldToggleOneLight() {
-        christmasLight.toggleLights(0,0,0,0);
+        var instruction = new Instruction(InstructionType.TOGGLE, 0, 0, 0, 0);
 
-        assertEquals(1, christmasLight.getLights()[0][0]);
-        christmasLight.toggleLights(0,0,0,0);
+        christmasLight.executeInstruction(instruction);
 
-        assertEquals(0, christmasLight.getLights()[0][0]);
+        assertEquals(1, christmasLight.getTotalLight());
+
+        christmasLight.executeInstruction(instruction);
+
+        assertEquals(0, christmasLight.getTotalLight());
     }
 
     @Test
     void shouldToggleMultipleLights() {
-        christmasLight.toggleLights(125,125,250,250);
+        var instruction = new Instruction(InstructionType.TOGGLE, 0, 0, 99, 99);
 
-        int[][] lights = new int[1000][1000];
-        for (int i = 125; i <= 250; i++) {
-            for (int j = 125; j <= 250 ; j++) {
-                lights[j][i] = 1;
-            }
-        }
-        assertArrayEquals(lights, christmasLight.getLights());
-        christmasLight.toggleLights(125,125,250,250);
-        lights = new int[1000][1000];
-        assertArrayEquals(lights, christmasLight.getLights());
+        christmasLight.executeInstruction(instruction);
 
+        assertEquals(10000, christmasLight.getTotalLight());
+
+        christmasLight.executeInstruction(instruction);
+
+        assertEquals(0, christmasLight.getTotalLight());
     }
 }
